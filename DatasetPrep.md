@@ -260,42 +260,38 @@ This set is what trained the **best model**.
 
 ---
 
-# **9. Improved Hard Pairs for the Latest Model (Teacher-Guided)**
+# **9. Teacher-Guided Hard Negative Generation (vLLM-Based Synthetic Pairs)**
 
-The best model revealed that **hard pairs were low-quality**.
+*(Used only for the Latest Model)*
 
-### Solution:
+In addition to the original hard-negative generation pipeline, we introduced an improved process using a **teacher LLM (Llama-3.1-8B-Instruct)** to create *polished truth vs. hard negative* pairs with strict structural constraints.
 
-Use **Llama-3.1-8B (teacher model)** to clean or regenerate:
+### **Purpose of This Step**
 
-* chosen responses
-* rejected responses
-* correctness ordering
-* hallucination realism
+This script:
 
-Using script `prepare_phase_datasets.py`:
+1. Loads the cleaned NQ + SQuAD SFT dataset
+2. Constructs Llama-3–style chat prompts using a strict system prompt
+3. Ensures the model produces structured JSON with:
 
-1. Load original fakes (easy, medium, hard)
-2. Reattach SFT data
-3. Let the teacher model:
+   * `"chosen_sentence"` — polished correct answer
+   * `"rejected_sentence"` — same sentence structure but with a *single* fabricated detail
+4. Enforces length budgets and token limits
+5. Filters out malformed or oversized samples
+6. Saves the resulting teacher-verified hard pairs into:
+   **`hard_fakes_vllm.jsonl`**
 
-   * rewrite ideal answers
-   * rewrite fake answers
-   * ensure ranking correctness
-4. Sample:
+### **Why We Added This Step**
 
-   * 8k easy
-   * 15k medium
-   * 20k hard
-5. Produce final high-quality DPO phase datasets:
+* The original hard negatives from the hallucinating 3B model were too noisy.
+* Many were malformed, unaligned, or not sufficiently *hard* to challenge the preference model.
+* The teacher Llama-3.1-8B produces **much higher-quality pairs**, improving:
 
-Outputs:
+  * truthfulness discrimination
+  * semantic alignment
+  * robustness under preference optimization
 
-* `dpo_pairs_easy_final.jsonl`
-* `dpo_pairs_medium_final.jsonl`
-* `dpo_pairs_hard_final.jsonl`
-
-These improved hard fakes (`hard_fakes_vllm`) are what trained the **latest model**.
+These improved pairs formed the basis of the **latest model’s DPO hard phase**, replacing the earlier hard samples.
 
 ---
 
