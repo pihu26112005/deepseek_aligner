@@ -197,6 +197,12 @@ Contains experiments using vLLM data prep (`hard_fake_gen_vllm.py`) and alternat
 
 ---
 
+## Dataset Preparation Process
+
+You can see the full process here [Dataset README](DatasetPrep.md)
+
+---
+
 ## Helpers / utility scripts
 
 * `scripts/download_model.py` — helper to download a model into `models/` (edit to match HF repo and filenames).
@@ -207,21 +213,187 @@ Contains experiments using vLLM data prep (`hard_fake_gen_vllm.py`) and alternat
 
 ## Results
 
-Pre-computed results and evaluation metrics are stored in `evaluation/results/` with the following structure:
+Pre-computed results and evaluation metrics are stored in `evaluation/results/` with the following structure.
+**For each metric file, the corresponding *detailed* per-example outputs can be found in the adjacent `detailed_*.jsonl` files.**
 
 ```
 evaluation/results/
 ├── TruthfulQA/
 │   ├── metrics_baseline.json
 │   ├── metrics_dpop_best.json
-│   └── metrics_dpop_last.json
+│   ├── metrics_dpop_last.json
+│   ├── detailed_gen_baseline.jsonl
+│   ├── detailed_dpop_best.jsonl
+│   ├── detailed_dpop_last.jsonl
+│   └── failed_model/
+│       ├── detailed_full_dpop.jsonl
+│       └── metrics_full_dpop.json
 ├── Halueval/
-│   ├── comparison_report.txt
-│   └── metrics_*.json
+│   ├── metrics_baseline.json
+│   ├── metrics_dpop_best.json
+│   ├── metrics_dpop_last.json
+│   ├── detailed_baseline.jsonl
+│   ├── detailed_dpop_best.jsonl
+│   └── detailed_dpop_last.jsonl
 └── HaluevalLLM/
-    └── metrics_eval_*.json
+    ├── metrics_baseline.json
+    ├── metrics_dpop_best.json
+    ├── metrics_dpop_last.json
+    ├── detailed_baseline.jsonl
+    ├── detailed_dpop_best.jsonl
+    └── detailed_dpop_last.jsonl
 ```
 
-These JSON files give final metrics for baseline and adapter-weighted evaluations.
+**All detailed per-sample evaluation traces (model outputs, hallucination flags, similarity scores, etc.) are available in the corresponding `detailed_*.jsonl` files next to the aggregated metric reports.**
+
+---
+
+The JSON files give final metrics for baseline and adapter-weighted evaluations.
+
+Here, are the results we obtained in detail
+1. HaluEval (Similarity Score)
+
+### Summary Table
+
+| Metric                    | Baseline | Best Model | Latest Model |
+| ------------------------- | -------- | ---------- | ------------ |
+| **Hallucination Rate**    | 0.0729   | 0.0684     | 0.0802       |
+| **Avg Confidence Margin** | 0.5424   | 0.5509     | 0.5408       |
+| **Avg BERT Score**        | 0.8063   | 0.8238     | 0.8162       |
+| **Avg BLEU**              | 0.0835   | 0.0851     | 0.0822       |
+| **Avg ROUGE-L**           | 0.7987   | 0.8086     | 0.7994       |
+| **Total Samples**         | 10,000   | 10,000     | 10,000       |
+
+### Relative Improvements (vs. Baseline)
+
+#### Best Model vs Baseline
+
+| Metric                    | Absolute Change | Relative Change |
+| ------------------------- | --------------- | --------------- |
+| **Hallucination Rate**    | −0.0045         | **−6.17%**      |
+| **Avg Confidence Margin** | +0.00854        | **+1.58%**      |
+| **Avg BERT Score**        | +0.01744        | **+2.16%**      |
+| **Avg BLEU**              | +0.00162        | **+1.94%**      |
+| **Avg ROUGE-L**           | +0.00991        | **+1.24%**      |
+
+#### Latest Model vs Baseline
+
+| Metric                    | Absolute Change | Relative Change |
+| ------------------------- | --------------- | --------------- |
+| **Hallucination Rate**    | +0.0073         | **+10.02%**     |
+| **Avg Confidence Margin** | −0.00158        | **−0.29%**      |
+| **Avg BERT Score**        | +0.00988        | **+1.23%**      |
+| **Avg BLEU**              | −0.00134        | **−1.60%**      |
+| **Avg ROUGE-L**           | +0.00068        | **+0.09%**      |
+
+### Interpretation
+
+* **Best Model** shows consistent improvements over Baseline across all metrics, with the largest gain in **BERT Score (+2.16%)** and a notable reduction in **Hallucination Rate (−6.17%)**.
+* **Latest Model** performs slightly above Baseline in semantic similarity metrics (BERT, ROUGE-L) but regresses in **Hallucination Rate (+10%)** and **BLEU (−1.6%)**.
+* Overall, **Best Model remains the strongest performer**.
+
+2. HaluEval (With LLM Judge)
+
+### Summary Table
+
+| Metric                 | Baseline | Best Model | Latest Model |
+| ---------------------- | -------- | ---------- | ------------ |
+| **Hallucination Rate** | 0.1654   | 0.1697     | 0.1929       |
+| **Avg Faithfulness**   | 0.7475   | 0.6940     | 0.7214       |
+| **Avg BERT F1**        | 0.4849   | 0.8072     | 0.5207       |
+| **Total Samples**      | 10,000   | 10,000     | 10,000       |
+
+### Relative Improvements (vs. Baseline)
+
+#### Best Model vs Baseline
+
+| Metric                 | Absolute Change | Relative Change |
+| ---------------------- | --------------- | --------------- |
+| **Hallucination Rate** | +0.0043         | **+2.60%**      |
+| **Avg Faithfulness**   | −0.05345        | **−7.15%**      |
+| **Avg BERT F1**        | +0.32225        | **+66.49%**     |
+
+#### Latest Model vs Baseline
+
+| Metric                 | Absolute Change | Relative Change |
+| ---------------------- | --------------- | --------------- |
+| **Hallucination Rate** | +0.0275         | **+16.62%**     |
+| **Avg Faithfulness**   | −0.02611        | **−3.49%**      |
+| **Avg BERT F1**        | +0.03578        | **+7.38%**      |
+
+
+### Interpretation
+
+* **Best Model** shows *substantial improvement* in **BERT F1 (+66%)**, indicating a major gain in semantic alignment.
+* However, this comes with decreases in **faithfulness (−7.15%)** and a small increase in **hallucination rate (+2.6%)**.
+* **Latest Model** improves BERT F1 modestly (+7.38%) but performs worse than Baseline in **hallucination rate** and **faithfulness**.
+* Overall, the **Best Model** excels in semantic precision (BERT F1) but trades off factual consistency.
+
+3. TruthfulQA
+
+### Summary Table
+
+| Metric               | Baseline | Best Model | Latest Model |
+| -------------------- | -------- | ---------- | ------------ |
+| **MC1**              | 0.26683  | 0.24969    | 0.26561      |
+| **MC2**              | 0.44323  | 0.42495    | 0.44347      |
+| **Gen Truthfulness** | 0.71359  | 0.66463    | 0.73562      |
+| **Gen Avg Prob**     | 0.71317  | 0.66194    | 0.72790      |
+
+### Relative Improvements (vs. Baseline)
+
+#### Best Model vs Baseline
+
+| Metric               | Absolute Change | Relative Change |
+| -------------------- | --------------- | --------------- |
+| **MC1**              | −0.01714        | **−6.42%**      |
+| **MC2**              | −0.01828        | **−4.12%**      |
+| **Gen Truthfulness** | −0.04896        | **−6.86%**      |
+| **Gen Avg Prob**     | −0.05122        | **−7.18%**      |
+
+#### Latest Model vs Baseline
+
+| Metric               | Absolute Change | Relative Change |
+| -------------------- | --------------- | --------------- |
+| **MC1**              | −0.00122        | **−0.46%**      |
+| **MC2**              | +0.00024        | **+0.05%**      |
+| **Gen Truthfulness** | +0.02203        | **+3.09%**      |
+| **Gen Avg Prob**     | +0.01474        | **+2.07%**      |
+
+### Interpretation
+
+* **Best Model** shows decreases across all metrics relative to Baseline, indicating regression in multiple areas.
+* **Latest Model** nearly matches Baseline on **MC1/MC2** and improves meaningfully in:
+
+  * **Gen Truthfulness (+3.09%)**
+  * **Gen Avg Prob (+2.07%)**
+* This suggests the **Latest Model** offers better overall truthfulness and confidence quality while maintaining comparable multiple-choice performance.
+
+Below is a cohesive **net conclusion** you can directly include in your results or discussion section:
+
+---
+
+## Net Conclusion
+
+The **best model** demonstrated a meaningful improvement in semantic understanding, as reflected in its significantly higher BERT-based similarity and F1 scores. These gains indicate that the model became better at capturing nuance, aligning its outputs more closely with intended meanings, and producing responses that were semantically richer and more context-aware. At the same time, it also reduced hallucinations relative to the baseline, showing that early alignment efforts were effective in encouraging more grounded responses.
+
+However, this improvement came with a noticeable behavioral shift:
+the best model became slightly more cautious. In many cases, it avoided strong assertions, defaulted to safer or more qualified responses, and occasionally under-answered queries where the baseline would have responded more directly. This suggests that the model adapted by prioritizing safety and correctness, but at the cost of reduced assertiveness or decisiveness—an early indication of the alignment–capability trade-off that becomes more apparent in the latest model.
+
+The evaluation results across **similarity metrics**, **faithfulness metrics**, and **TruthfulQA** reveal a clear trajectory in how the model family evolved. The **low TruthfulQA scores in earlier iterations** (particularly the baseline and best model) highlighted a significant gap in factual consistency, which motivated the development of the **latest model**. This newest version successfully improves **TruthfulQA truthfulness**, **average probability**, and maintains comparable multiple-choice performance, demonstrating that targeted alignment toward truthfulness was effective.
+
+However, these gains come with a new big trade-off:
+while the latest model is *more truthful*, it has begun to show signs of **instruction degradation**. In several examples, the model displays weaker adherence to instructions, reduced structured-response capability, and occasional misinterpretation of task format. In other words, the model is becoming more truthful but less reliably *instructable*. This suggests a form of **catastrophic forgetting**, where truthfulness-oriented fine-tuning partially erodes the base model’s instruction-following priors. This is the same problem that we wished to solve using curriculum DPO on the best model, which means that we must train the latest model also in a curriculum DPO fashion on the improved dataset and we should probably see gains across all the metrics.
+
+This creates the next key challenge:
+**How do we jointly optimize for low hallucination, high truthfulness, and strong instruction-following ability?**
+
+Future work must focus on **balanced alignment**, where:
+
+* TruthfulQA improvements are preserved,
+* Hallucinations continue to decrease,
+* Instruction capabilities are actively reinforced rather than overwritten.
+
+Achieving this balance—truthfulness without sacrificing instruction fidelity—is now the central goal for the next iteration of the model.
 
 ---
