@@ -20,9 +20,6 @@
 
 ---
 
-If you like, I can search for the missing three paper links (Curry DPO, Teaching Lies with Curry DPO, HaluCheck) and compile a full bibliography.
-
-
 ## Project overview
 
 This repository contains code and scripts to create and train ranking/alignment (DPO-style) adapters for LLaMA-based models, evaluate on hallucination and truthfulness benchmarks, and utilities for dataset preparation.
