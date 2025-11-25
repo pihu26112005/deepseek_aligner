@@ -1,5 +1,28 @@
 # DeepSeek Aligner
 
+## Important Research Papers and Links
+
+* **Base model:** [LLaMA 3 (“3.2-3B Instruct”)](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct)
+* **Dataset (Levelled Preference Pairs):** [Link](https://huggingface.co/datasets/mrhello291/LevelledPreferencePairs)
+* **LoRA weights for models:** [Link](https://huggingface.co/mrhello291/llama3-3.2-instuct-dpop) (“old_strat” = best model; “new_strat” = latest model)
+* **Teacher model:** [LLaMA 3 (“3.1-8B”)](https://huggingface.co/meta-llama/Llama-3.1-8B)
+* **TruthfulQA judge model:** [Link](https://huggingface.co/allenai/truthfulqa-truth-judge-llama2-7B)
+* **Hallucination evaluation model (Halueval judge):** [Link](https://huggingface.co/vectara/hallucination_evaluation_model)
+
+### Research Papers
+
+* DPO research: [Direct Preference Optimization: Your Language Model is Secretly a Reward Model](https://dl.acm.org/doi/10.5555/3666122.3668460)
+* Curry DPO: [Curry DPO: Enhancing Alignment using Curriculum Learning & Ranked Preferences](https://arxiv.org/pdf/2403.07230)
+* DPO-Postive (DPOP): [Fixing Failure Modes of Preference Optimisation with DPO-Positive](https://arxiv.org/pdf/2402.13228)
+* “Teaching Lies with Curry DPO”: [Teaching with Lies: Curriculum DPO on Synthetic Negatives for Hallucination Detection](https://arxiv.org/pdf/2505.17558)
+* HaluCheck: [HaluCheck: Halucheck: Integrating Hallucination Detection Techniques in Llm-Based Conversational Systems](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4944961)
+* DA-DPO: [daDPO: Distribution-Aware DPO for Distilling Conversational Abilities](https://arxiv.org/pdf/2506.15717)
+
+---
+
+If you like, I can search for the missing three paper links (Curry DPO, Teaching Lies with Curry DPO, HaluCheck) and compile a full bibliography.
+
+
 ## Project overview
 
 This repository contains code and scripts to create and train ranking/alignment (DPO-style) adapters for LLaMA-based models, evaluate on hallucination and truthfulness benchmarks, and utilities for dataset preparation.
