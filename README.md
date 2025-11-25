@@ -280,7 +280,6 @@ Here, are the results we obtained in detail
 | **Hallucination Rate**    | 0.0729   | 0.0684     | 0.0802       |
 | **Avg Confidence Margin** | 0.5424   | 0.5509     | 0.5408       |
 | **Avg BERT Score**        | 0.8063   | 0.8238     | 0.8162       |
-| **Avg BLEU**              | 0.0835   | 0.0851     | 0.0822       |
 | **Avg ROUGE-L**           | 0.7987   | 0.8086     | 0.7994       |
 | **Total Samples**         | 10,000   | 10,000     | 10,000       |
 
@@ -293,7 +292,6 @@ Here, are the results we obtained in detail
 | **Hallucination Rate**    | −0.0045         | **−6.17%**      |
 | **Avg Confidence Margin** | +0.00854        | **+1.58%**      |
 | **Avg BERT Score**        | +0.01744        | **+2.16%**      |
-| **Avg BLEU**              | +0.00162        | **+1.94%**      |
 | **Avg ROUGE-L**           | +0.00991        | **+1.24%**      |
 
 #### Latest Model vs Baseline
@@ -303,7 +301,6 @@ Here, are the results we obtained in detail
 | **Hallucination Rate**    | +0.0073         | **+10.02%**     |
 | **Avg Confidence Margin** | −0.00158        | **−0.29%**      |
 | **Avg BERT Score**        | +0.00988        | **+1.23%**      |
-| **Avg BLEU**              | −0.00134        | **−1.60%**      |
 | **Avg ROUGE-L**           | +0.00068        | **+0.09%**      |
 
 ### Interpretation
