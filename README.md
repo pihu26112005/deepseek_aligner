@@ -271,9 +271,9 @@ evaluation/results/
 The JSON files give final metrics for baseline and adapter-weighted evaluations.
 
 Here, are the results we obtained in detail
-1. HaluEval (Similarity Score)
+### 1. HaluEval (Similarity Score)
 
-### Summary Table
+#### Summary Table
 
 | Metric                    | Baseline | Best Model | Latest Model |
 | ------------------------- | -------- | ---------- | ------------ |
@@ -283,9 +283,9 @@ Here, are the results we obtained in detail
 | **Avg ROUGE-L**           | 0.7987   | 0.8086     | 0.7994       |
 | **Total Samples**         | 10,000   | 10,000     | 10,000       |
 
-### Relative Improvements (vs. Baseline)
+#### Relative Improvements (vs. Baseline)
 
-#### Best Model vs Baseline
+##### Best Model vs Baseline
 
 | Metric                    | Absolute Change | Relative Change |
 | ------------------------- | --------------- | --------------- |
@@ -294,7 +294,7 @@ Here, are the results we obtained in detail
 | **Avg BERT Score**        | +0.01744        | **+2.16%**      |
 | **Avg ROUGE-L**           | +0.00991        | **+1.24%**      |
 
-#### Latest Model vs Baseline
+##### Latest Model vs Baseline
 
 | Metric                    | Absolute Change | Relative Change |
 | ------------------------- | --------------- | --------------- |
@@ -303,15 +303,15 @@ Here, are the results we obtained in detail
 | **Avg BERT Score**        | +0.00988        | **+1.23%**      |
 | **Avg ROUGE-L**           | +0.00068        | **+0.09%**      |
 
-### Interpretation
+#### Interpretation
 
 * **Best Model** shows consistent improvements over Baseline across all metrics, with the largest gain in **BERT Score (+2.16%)** and a notable reduction in **Hallucination Rate (−6.17%)**.
 * **Latest Model** performs slightly above Baseline in semantic similarity metrics (BERT, ROUGE-L) but regresses in **Hallucination Rate (+10%)** and **BLEU (−1.6%)**.
 * Overall, **Best Model remains the strongest performer**.
 
-2. HaluEval (With LLM Judge)
+### 2. HaluEval (With LLM Judge)
 
-### Summary Table
+#### Summary Table
 
 | Metric                 | Baseline | Best Model | Latest Model |
 | ---------------------- | -------- | ---------- | ------------ |
@@ -320,9 +320,9 @@ Here, are the results we obtained in detail
 | **Avg BERT F1**        | 0.4849   | 0.8072     | 0.5207       |
 | **Total Samples**      | 10,000   | 10,000     | 10,000       |
 
-### Relative Improvements (vs. Baseline)
+#### Relative Improvements (vs. Baseline)
 
-#### Best Model vs Baseline
+##### Best Model vs Baseline
 
 | Metric                 | Absolute Change | Relative Change |
 | ---------------------- | --------------- | --------------- |
@@ -330,7 +330,7 @@ Here, are the results we obtained in detail
 | **Avg Faithfulness**   | −0.05345        | **−7.15%**      |
 | **Avg BERT F1**        | +0.32225        | **+66.49%**     |
 
-#### Latest Model vs Baseline
+##### Latest Model vs Baseline
 
 | Metric                 | Absolute Change | Relative Change |
 | ---------------------- | --------------- | --------------- |
@@ -339,16 +339,16 @@ Here, are the results we obtained in detail
 | **Avg BERT F1**        | +0.03578        | **+7.38%**      |
 
 
-### Interpretation
+#### Interpretation
 
 * **Best Model** shows *substantial improvement* in **BERT F1 (+66%)**, indicating a major gain in semantic alignment.
 * However, this comes with decreases in **faithfulness (−7.15%)** and a small increase in **hallucination rate (+2.6%)**.
 * **Latest Model** improves BERT F1 modestly (+7.38%) but performs worse than Baseline in **hallucination rate** and **faithfulness**.
 * Overall, the **Best Model** excels in semantic precision (BERT F1) but trades off factual consistency.
 
-3. TruthfulQA
+### 3. TruthfulQA
 
-### Summary Table
+#### Summary Table
 
 | Metric               | Baseline | Best Model | Latest Model |
 | -------------------- | -------- | ---------- | ------------ |
@@ -357,9 +357,9 @@ Here, are the results we obtained in detail
 | **Gen Truthfulness** | 0.71359  | 0.66463    | 0.73562      |
 | **Gen Avg Prob**     | 0.71317  | 0.66194    | 0.72790      |
 
-### Relative Improvements (vs. Baseline)
+#### Relative Improvements (vs. Baseline)
 
-#### Best Model vs Baseline
+##### Best Model vs Baseline
 
 | Metric               | Absolute Change | Relative Change |
 | -------------------- | --------------- | --------------- |
@@ -368,7 +368,7 @@ Here, are the results we obtained in detail
 | **Gen Truthfulness** | −0.04896        | **−6.86%**      |
 | **Gen Avg Prob**     | −0.05122        | **−7.18%**      |
 
-#### Latest Model vs Baseline
+##### Latest Model vs Baseline
 
 | Metric               | Absolute Change | Relative Change |
 | -------------------- | --------------- | --------------- |
@@ -377,7 +377,7 @@ Here, are the results we obtained in detail
 | **Gen Truthfulness** | +0.02203        | **+3.09%**      |
 | **Gen Avg Prob**     | +0.01474        | **+2.07%**      |
 
-### Interpretation
+#### Interpretation
 
 * **Best Model** shows decreases across all metrics relative to Baseline, indicating regression in multiple areas.
 * **Latest Model** nearly matches Baseline on **MC1/MC2** and improves meaningfully in:
